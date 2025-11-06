@@ -21,9 +21,9 @@ def getEmptiestLane(carLen, S, c) :
     # Return the index of the emptiest suitable lane for the current car.
     # Return -1 is there is no suitable lane
     emptiestLane = -1
-    emptiestLaneSize = 0
+    emptiestLaneSize = c + 1
     for i in range(len(S)) : 
-        if (emptiestLane == -1 or sum(S[i]) < emptiestLaneSize) and (sum(S[i]) + carLen <= c) : 
+        if sum(S[i]) < emptiestLaneSize and (sum(S[i]) + carLen <= c) : 
             emptiestLaneSize = sum(S[i])
             emptiestLane = i
     return emptiestLane
@@ -32,9 +32,9 @@ def getFullestLane(carLen, S, c) :
     # Return the index of the fullest suitable lane for the current car.
     # Return -1 is there is no suitable lane
     fullestLane = -1
-    fullestLaneSize = 0
+    fullestLaneSize = -1
     for i in range(len(S)) : 
-        if (fullestLane == -1 or sum(S[i]) > fullestLaneSize) and (sum(S[i]) + carLen <= c) : 
+        if sum(S[i]) > fullestLaneSize and (sum(S[i]) + carLen <= c) : 
             fullestLaneSize = sum(S[i])
             fullestLane = i
     return fullestLane
@@ -104,7 +104,7 @@ def main():
     # Here is the basic algorithm.
     for i in range(len(L)):
         carLen = L[i]
-        lane = getRandomLane(carLen, S, c)
+        lane = getFullestLane(carLen, S, c)
         if lane != -1:
             S[lane].append(carLen)
         else:
@@ -115,5 +115,5 @@ def main():
 
 
 if __name__ == "__main__":
-    #main()
-    print(generateRandomInput())
+    main()
+    #print(generateRandomInput())
