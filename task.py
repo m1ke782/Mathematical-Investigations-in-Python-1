@@ -124,6 +124,15 @@ def task_1() :
     print("The overflow is : ", avg_overflow_size)
 
 def generate_random_input() : 
+    """
+        Generates a random input for the ferry packing problem.
+
+        Inputs : 
+            none
+        
+        Returns : 
+            int[] : list of vehicle lengths
+    """
     cars = []
     for i in range(100) : 
         cars.append(random.randint(350,399))
@@ -150,4 +159,4 @@ def task_2() :
     print("The average overflow is : ", statistics.mean(overflows))
     print("The variance of overflow is : ", statistics.variance(overflows))
 
-task_2()
+task_1()
