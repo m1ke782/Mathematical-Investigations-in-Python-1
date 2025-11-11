@@ -1,4 +1,6 @@
 import random
+import statistics
+import matplotlib.pyplot as plt
 
 def get_first_lane(car_len, lanes, capactity):
     """
@@ -121,4 +123,31 @@ def task_1() :
     avg_overflow_size = sum(get_overflow(num_lanes, capacity, cars, lane_selectors[lane_selector]) for i in range(trials)) / trials
     print("The overflow is : ", avg_overflow_size)
 
-task_1()
+def generate_random_input() : 
+    cars = []
+    for i in range(100) : 
+        cars.append(random.randint(350,399))
+    for i in range(200) : 
+        cars.append(random.randint(400,449))
+    for i in range(100) : 
+        cars.append(random.randint(450,499))
+    for i in range(70) : 
+        cars.append(random.randint(500,599))
+    for i in range(30) : 
+        cars.append(random.randint(600,2000))
+
+    random.shuffle(cars)
+    return cars
+
+def task_2() : 
+    lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
+    lane_selector = int(input("What lane selector do you wish to use? 0:First, 1:Emptiest, 2:Fullest, 3:Random "))
+    trials = int(input("How many trials do you wish to perform? "))
+
+
+
+    overflows = [get_overflow(85, 3000, generate_random_input(), lane_selectors[lane_selector]) for i in range(trials)]
+    print("The average overflow is : ", statistics.mean(overflows))
+    print("The variance of overflow is : ", statistics.variance(overflows))
+
+task_2()
