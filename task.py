@@ -63,15 +63,14 @@ def get_random_lane(car_len, lanes, capacity) :
     return random.choice(suitable_lanes)
 
 def get_overflow(num_lanes, capacity, cars, lane_selector) : 
-    S = [[] for i in range(num_lanes)]
+    lanes = [[] for i in range(num_lanes)]
     overflow = []
-    for i in range(len(L)):
+    for i in range(len(cars)):
         car_len = cars[i]
-        lane = lane_selector(car_len, S, capacity)
+        lane = lane_selector(car_len, lanes, capacity)
         if lane != -1:
-            S[lane].append(car_len)
+            lanes[lane].append(car_len)
         else:
             overflow.append(car_len)
 
     return overflow
-
