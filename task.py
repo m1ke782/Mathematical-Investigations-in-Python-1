@@ -15,7 +15,7 @@ def get_emptiest_lane(car_len, lanes, capacity) :
     emptiest_lane = -1
     emptiest_lane_size = capacity + 1
     for i in range(len(lanes)) : 
-        if sum(lanes[i]) < emptiest_lane_size and (sum(lanes[i]) + car_len <= c) : 
+        if sum(lanes[i]) < emptiest_lane_size and (sum(lanes[i]) + car_len <= capacity) : 
             emptiest_lane = sum(lanes[i])
             emptiest_lane = i
     return emptiest_lane
@@ -35,7 +35,7 @@ def get_fullest_lane(car_len, lanes, capacity) :
     fullest_lane = -1
     fullest_lane_size = -1
     for i in range(len(lanes)) : 
-        if sum(lanes[i]) > fullest_lane_size and (sum(lanes[i]) + car_len <= c) : 
+        if sum(lanes[i]) > fullest_lane_size and (sum(lanes[i]) + car_len <= capacity) : 
             fullest_lane_size = sum(lanes[i])
             fullest_lane = i
     return fullest_lane
