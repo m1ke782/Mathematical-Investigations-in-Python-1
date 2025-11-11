@@ -63,6 +63,18 @@ def get_random_lane(car_len, lanes, capacity) :
     return random.choice(suitable_lanes)
 
 def get_overflow(num_lanes, capacity, cars, lane_selector) : 
+    """
+    Returns the the total length of cars in the overflow carpark.
+
+    Inputs : 
+        - num_lanes | int       : the number of lanes
+        - capacity | int        : the maximum capacity of each lane
+        - cars| int[]           : the list of car lengths
+        - lane_selector | func  : the lane sector function, takes in (car_len, lanes, capacity) as parameters are returns the lane index 
+
+    Returns : 
+        int     : the total length of cars in the overflow carpark.
+    """
     lanes = [[] for i in range(num_lanes)]
     overflow = []
     for i in range(len(cars)):
@@ -74,3 +86,4 @@ def get_overflow(num_lanes, capacity, cars, lane_selector) :
             overflow.append(car_len)
 
     return overflow
+
