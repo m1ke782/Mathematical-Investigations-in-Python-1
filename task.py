@@ -1,5 +1,22 @@
 import random
 
+def get_first_lane(car_len, lanes, capactity):
+    """
+    Returns the index of the first lane that still has enough space to hold a new car.
+
+    Inputs : 
+        - car_len | int     : the length of the new car to add
+        - lanes | int[][]   : the list of lanes, where each lane is a list of car lengths
+        - capacity | int    : the maximum capacity of each lane
+
+    Returns : 
+        int     : the index of the first lane that can fit a new car. Returns -1 in the case no such lane exists.
+    """
+    for i in range(len(lanes)):
+        if sum(lanes[i]) + car_len <= capactity:
+            return i
+    return -1
+
 def get_emptiest_lane(car_len, lanes, capacity) : 
     """
     Returns the index of the emptiest lane that still has enough space to hold a new car.
@@ -16,9 +33,10 @@ def get_emptiest_lane(car_len, lanes, capacity) :
     emptiest_lane_size = capacity + 1
     for i in range(len(lanes)) : 
         if sum(lanes[i]) < emptiest_lane_size and (sum(lanes[i]) + car_len <= capacity) : 
-            emptiest_lane = sum(lanes[i])
+            emptiest_lane_size = sum(lanes[i])
             emptiest_lane = i
     return emptiest_lane
+    
 
 def get_fullest_lane(car_len, lanes, capacity) : 
     """
@@ -85,5 +103,22 @@ def get_overflow(num_lanes, capacity, cars, lane_selector) :
         else:
             overflow.append(car_len)
 
-    return overflow
+    return sum(overflow)
 
+
+def task_1() : 
+    cars = []
+    with open("input.txt", "r") as f:
+        capacity = int(f.readline())
+        num_lanes = int(f.readline())
+        for line in f:
+            cars.append(int(line))
+
+    lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
+    lane_selector = int(input("What lane selector do you wish to use? 0:First, 1:Emptiest, 2:Fullest, 3:Random "))
+    trials = int(input("How many trials do you wish to perform? "))
+
+    avg_overflow_size = sum(get_overflow(num_lanes, capacity, cars, lane_selectors[lane_selector]) for i in range(trials)) / trials
+    print("The overflow is : ", avg_overflow_size)
+
+task_1()
