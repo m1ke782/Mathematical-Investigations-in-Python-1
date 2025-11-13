@@ -178,4 +178,48 @@ def task_3_a() :
 
     print(scipy.stats.f_oneway(*samples))
 
-task_3_a()
+def get_overflow_sorting_k(num_lanes, capacity, cars, lane_selector, k) : 
+    """
+    Returns the the total length of cars in the overflow carpark.
+
+    Inputs : 
+        - num_lanes | int       : the number of lanes
+        - capacity | int        : the maximum capacity of each lane
+        - cars| int[]           : the list of car lengths
+        - lane_selector | func  : the lane sector function, takes in (car_len, lanes, capacity) as parameters are returns the lane index 
+        - k | int               : the number of cars to consider in one chunk
+
+    Returns : 
+        int     : the total length of cars in the overflow carpark.
+    """
+    lanes = [[] for i in range(num_lanes)]
+    overflow = []
+    for i in range(0, len(cars), k):
+        next_k_cars = [cars[i+j] for j in range(0,k) if i+j < len(cars)]
+        next_k_cars.sort(reverse=True)
+
+        for j in range(len(next_k_cars)) : 
+            car_len = next_k_cars[j]
+            lane = lane_selector(car_len, lanes, capacity)
+            if lane != -1:
+                lanes[lane].append(car_len)
+            else:
+                overflow.append(car_len)
+
+    return sum(overflow)
+
+def task_3_b() : 
+    lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
+    trials = 1000
+
+    samples = []
+    for lane_selector in lane_selectors : 
+        overflows = [get_overflow_sorting_k(85, 3000, generate_random_input(), lane_selector, 500) for i in range(trials)]
+        print("Algorithm ", lane_selector, " : ")
+        print(" The average overflow is : ", statistics.mean(overflows))
+        print(" The variance of overflow is : ", statistics.variance(overflows))
+        samples.append(overflows)
+
+    print(scipy.stats.f_oneway(*samples))
+
+task_3_b()
