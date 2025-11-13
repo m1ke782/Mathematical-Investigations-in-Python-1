@@ -164,4 +164,18 @@ def task_2() :
 
     print(scipy.stats.f_oneway(*samples))
 
-task_2()
+def task_3_a() : 
+    lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
+    trials = 1000
+
+    samples = []
+    for lane_selector in lane_selectors : 
+        overflows = [get_overflow(85, 3000, generate_random_input(False), lane_selector) for i in range(trials)]
+        print("Algorithm ", lane_selector, " : ")
+        print(" The average overflow is : ", statistics.mean(overflows))
+        print(" The variance of overflow is : ", statistics.variance(overflows))
+        samples.append(overflows)
+
+    print(scipy.stats.f_oneway(*samples))
+
+task_3_a()
