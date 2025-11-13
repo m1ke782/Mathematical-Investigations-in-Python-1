@@ -129,7 +129,7 @@ def generate_random_input(shuffled=True) :
         Generates a random input for the ferry packing problem.
 
         Inputs : 
-            none
+            shuffled | bool (optional)  : whether the input is to be shuffled
         
         Returns : 
             int[] : list of vehicle lengths
@@ -163,6 +163,12 @@ def task_2() :
         samples.append(overflows)
 
     print(scipy.stats.f_oneway(*samples))
+
+def task_2b() : 
+    trials = 1000
+    X_1 = [get_overflow(85, 3000, generate_random_input(), get_first_lane) for i in range(1000)]
+    X_2 = [get_overflow(85, 3000, generate_random_input(), get_fullest_lane) for i in range(1000)]
+    print(scipy.stats.ttest_ind(X_1,X_2, equal_var = False))
 
 def task_3_a() : 
     lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
@@ -209,17 +215,14 @@ def get_overflow_sorting_k(num_lanes, capacity, cars, lane_selector, k) :
     return sum(overflow)
 
 def task_3_b() : 
-    lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
+    lane_selectors = [get_first_lane]
     trials = 1000
 
-    samples = []
     for lane_selector in lane_selectors : 
-        overflows = [get_overflow_sorting_k(85, 3000, generate_random_input(), lane_selector, 500) for i in range(trials)]
-        print("Algorithm ", lane_selector, " : ")
-        print(" The average overflow is : ", statistics.mean(overflows))
-        print(" The variance of overflow is : ", statistics.variance(overflows))
-        samples.append(overflows)
-
-    print(scipy.stats.f_oneway(*samples))
-
-task_3_b()
+        overflow_against_k = []
+        for k in range(1,501) : 
+            overflows = sum([get_overflow_sorting_k(85, 3000, generate_random_input(), lane_selector, 500) for i in range(trials)]) / trials
+            overflow_against_k.append(overflows)
+        plt.plot(overflow_against_k)
+        print(overflow_against_k)
+    plt.show()
