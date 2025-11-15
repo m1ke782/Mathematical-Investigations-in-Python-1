@@ -119,7 +119,7 @@ def task_1() :
             cars.append(int(line))
 
     lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
-    lane_selector = int(input("What lane selector do you wish to use? 0:First, 1:Emptiest, 2:Fullest, 3:Random "))
+    lane_selector = int(input("What lane selectors do you wish to use?  0:First, 1:Emptiest, 2:Fullest, 3:Random "))
     trials = int(input("How many trials do you wish to perform? "))
 
     avg_overflow_size = sum(get_overflow(num_lanes, capacity, cars, lane_selectors[lane_selector]) for i in range(trials)) / trials
@@ -158,33 +158,29 @@ def task_2() :
     samples = []
     for lane_selector in lane_selectors : 
         overflows = [get_overflow(85, 3000, generate_random_input(), lane_selector) for i in range(trials)]
-        print("Algorithm ", lane_selector, " : ")
-        print(" The average overflow is : ", statistics.mean(overflows))
-        print(" The variance of overflow is : ", statistics.variance(overflows))
+        print("Algorithm ", lane_selector.__name__, " : mean = ", statistics.mean(overflows), "var = ", statistics.variance(overflows))
         samples.append(overflows)
 
     print(scipy.stats.f_oneway(*samples))
+    print(scipy.stats.ttest_ind(samples[0], samples[2], equal_var=False))
+    plt.bar([l.__name__ for l in lane_selectors], [statistics.mean(sample) for sample in samples])
+    plt.show()
 
-
-def task_2b() : 
-    trials = 1000
-    X_1 = [get_overflow(85, 3000, generate_random_input(), get_first_lane) for i in range(1000)]
-    X_2 = [get_overflow(85, 3000, generate_random_input(), get_fullest_lane) for i in range(1000)]
-    print(scipy.stats.ttest_ind(X_1,X_2, equal_var = False))
 
 def task_3_a() : 
     lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
-    trials = 1000
+    trials = 10000
 
     samples = []
     for lane_selector in lane_selectors : 
         overflows = [get_overflow(85, 3000, generate_random_input(False), lane_selector) for i in range(trials)]
-        print("Algorithm ", lane_selector, " : ")
-        print(" The average overflow is : ", statistics.mean(overflows))
-        print(" The variance of overflow is : ", statistics.variance(overflows))
+        print("Algorithm ", lane_selector.__name__, " : mean = ", statistics.mean(overflows), "var = ", statistics.variance(overflows))
         samples.append(overflows)
 
     print(scipy.stats.f_oneway(*samples))
+    print(scipy.stats.ttest_ind(samples[0], samples[2], equal_var=False))
+    plt.bar([l.__name__ for l in lane_selectors], [statistics.mean(sample) for sample in samples])
+    plt.show()
 
 def get_overflow_sorting_k(num_lanes, capacity, cars, lane_selector, k) : 
     """
@@ -217,27 +213,27 @@ def get_overflow_sorting_k(num_lanes, capacity, cars, lane_selector, k) :
     return overflow
 
 def task_3_b() : 
-    lane_selectors = [get_first_lane]
-    trials = 1000
+    lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
+    trials = 10000
 
     for lane_selector in lane_selectors : 
         overflow_against_k = []
-        for k in tqdm.tqdm(range(1,501)) : 
+        for k in range(1,501) : 
             overflows = sum([get_overflow_sorting_k(85, 3000, generate_random_input(), lane_selector, k) for i in range(trials)]) / trials
             overflow_against_k.append(overflows)
+        print(scipy.stats.spearmanr(range(1,501), overflow_against_k))
         plt.plot(overflow_against_k)
     plt.show()
 
-task_3_b()
-
 def task_3_c() : 
     lane_selectors = [get_first_lane, get_emptiest_lane, get_fullest_lane, get_random_lane]
-    trials = 500
+    trials = 1000
 
     for lane_selector in lane_selectors : 
         overflow_against_lane_number = []
-        for no_lanes in tqdm.tqdm(range(1,201)) : 
+        for no_lanes in tqdm.tqdm(range(1,730)) : 
             overflows = sum([get_overflow(no_lanes, 3000*85/no_lanes, generate_random_input(), lane_selector) for i in range(trials)]) / trials
             overflow_against_lane_number.append(overflows)
+        print(scipy.stats.spearmanr(range(1,730), overflow_against_lane_number))
         plt.plot(overflow_against_lane_number)
     plt.show()
