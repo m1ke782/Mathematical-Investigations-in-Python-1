@@ -231,9 +231,32 @@ def task_3_c() :
 
     for lane_selector in lane_selectors : 
         overflow_against_lane_number = []
-        for no_lanes in tqdm.tqdm(range(1,730)) : 
+        for no_lanes in range(1,730) : 
             overflows = sum([get_overflow(no_lanes, 3000*85/no_lanes, generate_random_input(), lane_selector) for i in range(trials)]) / trials
             overflow_against_lane_number.append(overflows)
         print(scipy.stats.spearmanr(range(1,730), overflow_against_lane_number))
         plt.plot(overflow_against_lane_number)
     plt.show()
+
+
+def greedy_lane_overflow(no_lanes, capacity, cars) : 
+    cars_left = cars.copy()
+    cars_left.sort(reverse=True)
+
+    for i in range(no_lanes) : 
+        lane_sum = 0
+        j = 0
+        while j < len(cars_left) : 
+            if lane_sum + cars_left[j] <= capacity : 
+                lane_sum += cars_left[j]
+                del cars_left[j]
+            else : 
+                j += 1
+    return sum(cars_left)
+
+def task_3_d() : 
+    trials = 10000
+    overflows = [greedy_lane_overflow(85, 3000, generate_random_input()) for i in range(trials)]
+    print(statistics.mean(overflows))
+
+task_3_d()
