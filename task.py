@@ -163,7 +163,7 @@ def task_2() :
 
     print(scipy.stats.f_oneway(*samples))
     print(scipy.stats.ttest_ind(samples[0], samples[2], equal_var=False))
-    plt.bar([l.__name__ for l in lane_selectors], [statistics.mean(sample) for sample in samples])
+    plt.bar_label(plt.bar([l.__name__ for l in lane_selectors], [statistics.mean(sample) for sample in samples]))
     plt.show()
 
 
@@ -179,7 +179,7 @@ def task_3_a() :
 
     print(scipy.stats.f_oneway(*samples))
     print(scipy.stats.ttest_ind(samples[0], samples[2], equal_var=False))
-    plt.bar([l.__name__ for l in lane_selectors], [statistics.mean(sample) for sample in samples])
+    plt.bar_label(plt.bar([l.__name__ for l in lane_selectors], [statistics.mean(sample) for sample in samples]))
     plt.show()
 
 def get_overflow_sorting_k(num_lanes, capacity, cars, lane_selector, k) : 
