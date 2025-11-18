@@ -1,4 +1,3 @@
-import tqdm
 import random
 import statistics
 import matplotlib.pyplot as plt
